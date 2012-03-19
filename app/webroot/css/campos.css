@@ -1,0 +1,48 @@
+.data {
+    width: 80px;
+}
+.data-hora {
+    width: 140px;
+}
+.edit2 {
+    width: 25px;
+}
+.edit4 {
+    width: 50px;
+}
+.edit8 {
+    width: 70px;
+}
+.edit10 {
+    width: 86px;
+}
+.edit14 {
+    width: 120px;
+}
+.edit18 {
+    width: 155px;
+}
+.edit20 {
+    width: 172px;
+}
+.edit25 {
+    width: 210px;
+}
+.edit30 {
+    width: 260px;
+}
+.edit40 {
+    width: 346px;
+}
+.edit50 {
+    width: 430px;
+}
+.edit100 {
+    width: 800px;
+}
+.hora {
+    width: 65px;
+}
+.moeda {
+    width: 110px;
+}
