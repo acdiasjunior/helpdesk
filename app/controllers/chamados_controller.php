@@ -150,7 +150,7 @@ class ChamadosController extends AppController {
                 $this->redirect(array('controller' => $this->name, 'action' => 'index'));
             }
         }
-        $categorias = $this->Chamado->Subcategoria->Categoria->find('list', array('conditions' => array('Categoria.subcategoria_count >' => 0)));
+        $categorias = $this->categoriasUsuario();
         $this->set(compact('categorias'));
     }
 
@@ -246,7 +246,7 @@ class ChamadosController extends AppController {
             $responsavel = $this->Session->read('Auth.Usuario');
             $this->Chamado->set('responsavel_id', $responsavel['id']);
             if ($this->Chamado->save()) {
-//                $this->enviarEmailAberturaChamadoUsuario($this->Chamado->read());
+                $this->enviarEmailAberturaChamadoUsuario($this->Chamado->read());
                 $this->Session->setFlash('Cadastro salvo.');
                 $this->redirect(array('controller' => $this->name, 'action' => 'interagir', $id));
             } else {
@@ -328,22 +328,42 @@ class ChamadosController extends AppController {
             )
                 )
         );
-        var_dump($admins);
-        die();
-        /*
-          foreach ($admins as $suporte) {
-          $this->Email->reset();
-          $this->Email->to = "{$suporte['Usuario']['nome']} <{$suporte['Usuario']['email']}>";
-          $this->Email->subject = "HelpDesk - Novo chamado - Chamado #{$chamado['Chamado']['id']}";
-          $body = $this->Modelo->find('first', array('conditions' => array('nome' => 'abertura_chamado_suporte')));
-          $body = Chamado::trocaVariaveis($chamado, $body['Modelo']['texto'], $suporte);
-          $this->Email->send($body);
-          if (!empty($this->Email->smtpError)) {
-          $this->Session->setFlash('Erro ao enviar email.');
-          $this->redirect(array('action' => 'index'));
-          }
-          } */
+
+        foreach ($admins as $suporte) {
+            $this->Email->reset();
+            $this->Email->to = "{$suporte['Usuario']['nome']} <{$suporte['Usuario']['email']}>";
+            $this->Email->subject = "HelpDesk - Novo chamado - Chamado #{$chamado['Chamado']['id']}";
+            $body = $this->Modelo->find('first', array('conditions' => array('nome' => 'abertura_chamado_suporte')));
+            $body = Chamado::trocaVariaveis($chamado, $body['Modelo']['texto'], $suporte);
+            $this->Email->send($body);
+            if (!empty($this->Email->smtpError)) {
+                $this->Session->setFlash('Erro ao enviar email.');
+                $this->redirect(array('action' => 'index'));
+            }
+        }
     }
+    
+    private function categoriasUsuario() {
+        $userid = $this->Session->read('Auth.Usuario.id');
+        $this->loadModel('Usuario');
+        $this->Usuario->id = $userid;
+        $user = $this->Usuario->find('first', array(
+            'conditions' => array(
+                'Usuario.id' => $userid
+            ),
+            'contain' => array(
+                'Grupo' => array(
+                    'Categoria'
+                )
+            )
+        ));
+        $categorias = array();
+        foreach($user['Grupo']['Categoria'] as $categoria) {
+            $categorias[$categoria['id']] = $categoria['descricao'];
+        }
+        return $categorias;
+    }
+        
 
     function beforeFilter() {
         parent::beforeFilter();
