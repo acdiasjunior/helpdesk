@@ -316,26 +316,33 @@ class ChamadosController extends AppController {
     function enviarEmailAberturaChamadoSuporte($chamado) {
         $this->autoRender = false;
         $admins = $this->Chamado->Usuario->find('all', array(
-            'OR' => array(
-                'Usuario.tipo_usuario' => Usuario::TIPO_SUPORTE,
-                'Usuario.tipo_usuario' => Usuario::TIPO_ADMINISTRADOR,
+            'fields' => array(
+                'Usuario.nome',
+                'Usuario.email'
+            ),
+            'conditions' => array(
+                'OR' => array(
+                    'Usuario.tipo_usuario' => Usuario::TIPO_SUPORTE,
+                    'Usuario.tipo_usuario' => Usuario::TIPO_ADMINISTRADOR,
+                )
             )
                 )
         );
-        var_dump($admins); die();
+        var_dump($admins);
+        die();
         /*
-        foreach ($admins as $suporte) {
-            $this->Email->reset();
-            $this->Email->to = "{$suporte['Usuario']['nome']} <{$suporte['Usuario']['email']}>";
-            $this->Email->subject = "HelpDesk - Novo chamado - Chamado #{$chamado['Chamado']['id']}";
-            $body = $this->Modelo->find('first', array('conditions' => array('nome' => 'abertura_chamado_suporte')));
-            $body = Chamado::trocaVariaveis($chamado, $body['Modelo']['texto'], $suporte);
-            $this->Email->send($body);
-            if (!empty($this->Email->smtpError)) {
-                $this->Session->setFlash('Erro ao enviar email.');
-                $this->redirect(array('action' => 'index'));
-            }
-        }*/
+          foreach ($admins as $suporte) {
+          $this->Email->reset();
+          $this->Email->to = "{$suporte['Usuario']['nome']} <{$suporte['Usuario']['email']}>";
+          $this->Email->subject = "HelpDesk - Novo chamado - Chamado #{$chamado['Chamado']['id']}";
+          $body = $this->Modelo->find('first', array('conditions' => array('nome' => 'abertura_chamado_suporte')));
+          $body = Chamado::trocaVariaveis($chamado, $body['Modelo']['texto'], $suporte);
+          $this->Email->send($body);
+          if (!empty($this->Email->smtpError)) {
+          $this->Session->setFlash('Erro ao enviar email.');
+          $this->redirect(array('action' => 'index'));
+          }
+          } */
     }
 
     function beforeFilter() {
