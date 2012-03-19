@@ -10,6 +10,7 @@ class Usuario extends AppModel {
         'Chamado',
         'ChamadosInteracao'
     );
+    var $actsAs = array('Containable');
     var $validate = array(
         'username' => array(
             'unico' => array(
