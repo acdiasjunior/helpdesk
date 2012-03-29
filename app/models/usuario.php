@@ -6,7 +6,7 @@ class Usuario extends AppModel {
     var $displayField = 'nome';
     var $belongsTo = array('Grupo');
     var $hasMany = array(
-        'Acesso',
+        'Acesso' => array('dependent' => true),
         'Chamado',
         'ChamadosInteracao'
     );
@@ -39,7 +39,7 @@ class Usuario extends AppModel {
             ),
         ),
     );
-    
+
     //////////////////////////// COMBOS BOXES
 
     /*
@@ -59,5 +59,4 @@ class Usuario extends AppModel {
     const TIPO_ADMINISTRADOR = 0;
     const TIPO_SUPORTE = 1;
     const TIPO_USUARIO = 2;
-    
 }

@@ -83,14 +83,21 @@ class UsuariosController extends AppController {
     }
 
     function admin_excluir($id) {
-        if ($this->Session->read('Auth.Usuario.id') != 1) {
-            $this->Session->setFlash('Somente o Administrador pode<br />excluir usuários!');
+        if ($this->Session->read('Auth.Usuario.tipo_usuario') != Usuario::TIPO_ADMINISTRADOR) {
+            $this->Session->setFlash('Somente administradores podem<br />excluir usuários!');
             $this->redirect(array('controller' => 'pages'));
         } else {
             if (!empty($id)) {
-                $this->Usuario->delete($id);
-                $this->Session->setFlash('O usuario com id: ' . $id . ' foi excluído.');
-                $this->redirect(array('action' => 'index'));
+                if ($this->Usuario->Chamado->find('count', array('conditions' => array('usuario_id' => $id))) > 0) {
+                    $this->Session->setFlash('Não foi possível excluir!<br />Existem chamados abertos para este usuário.');
+                    $this->redirect(array('action' => 'admin_index'));
+                }
+                if ($this->Usuario->delete($id)) {
+                    $this->Session->setFlash('O usuario com id: ' . $id . ' foi excluído.');
+                } else {
+                    $this->Session->setFlash('Ocorreu um erro ao excluir o usuário!');
+                }
+                $this->redirect(array('action' => 'admin_index'));
             } else {
                 $this->Session->setFlash('Erro ao tentar excluir: ID inexistente!');
                 $this->redirect(array('action' => 'index'));
@@ -113,12 +120,12 @@ class UsuariosController extends AppController {
     function logout() {
         $this->redirect($this->Auth->logout());
     }
-    
+
     function mudarSenha() {
         if (!empty($this->data['Usuario']['nova_senha'])) {
             $this->Usuario->id = $this->Session->read('Auth.Usuario.id');
             $this->Usuario->set('password', $this->Auth->password($this->data['Usuario']['nova_senha']));
-            if($this->Usuario->save($this->data))
+            if ($this->Usuario->save($this->data))
                 $this->Session->setFlash('Senha alterada!');
             else
                 $this->Session->setFlash('Erro ao gravar a nova senha!');

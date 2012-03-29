@@ -56,7 +56,7 @@ echo $javascript->link(array('flexigrid.pack', 'button'));
     
     function actions(com, grid) {
         var id = $('.trSelected', grid).find('td[abbr="Usuario.id"]').text();
-        var descricao = $('.trSelected', grid).find('td[abbr="Usuario.descricao"]').text();
+        var nome = $('.trSelected', grid).find('td[abbr="Usuario.nome"]').text();
         switch(com)
         {
             case "Incluir":
@@ -71,7 +71,7 @@ echo $javascript->link(array('flexigrid.pack', 'button'));
             case "Excluir":
                 if(id != '')
                 {
-                    if(confirm('Deseja realmente excluir?\nUsuario: ' + descricao))
+                    if(confirm('Deseja realmente excluir?\nUsuario: ' + nome))
                         $(location).attr('href','<?php echo $this->Html->url(array('admin' => true, 'controller' => 'usuarios', 'action' => 'excluir')); ?>/' + id);
                 }
                 else
