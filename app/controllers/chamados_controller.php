@@ -342,28 +342,27 @@ class ChamadosController extends AppController {
             }
         }
     }
-    
+
     private function categoriasUsuario() {
         $userid = $this->Session->read('Auth.Usuario.id');
         $this->loadModel('Usuario');
         $this->Usuario->id = $userid;
         $user = $this->Usuario->find('first', array(
-            'conditions' => array(
-                'Usuario.id' => $userid
-            ),
             'contain' => array(
                 'Grupo' => array(
                     'Categoria'
                 )
+            ),
+            'conditions' => array(
+                'Usuario.id' => $userid
             )
-        ));
+                ));
         $categorias = array();
-        foreach($user['Grupo']['Categoria'] as $categoria) {
+        foreach ($user['Grupo']['Categoria'] as $categoria) {
             $categorias[$categoria['id']] = $categoria['descricao'];
         }
         return $categorias;
     }
-        
 
     function beforeFilter() {
         parent::beforeFilter();

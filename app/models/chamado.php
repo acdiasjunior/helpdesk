@@ -13,6 +13,12 @@ class Chamado extends AppModel {
     );
     var $hasMany = array('ChamadosInteracao');
     var $actsAs = array('DateFormatter', 'Containable');
+    var $validate = array(
+        'categoria_id' => array(
+            'rule' => 'notEmpty',
+            'message' => 'Você deve selecionar uma categoria.'
+        )
+    );
 
     static function trocaVariaveis($dados, $body, $suporte = null) {
         $variaveis = array(
@@ -26,7 +32,7 @@ class Chamado extends AppModel {
             '_CHAMADO_ASSUNTO_' => $dados['Chamado']['assunto'],
             '_CHAMADO_TEXTO_' => $dados['Chamado']['texto'],
         );
-        if(!is_null($suporte))
+        if (!is_null($suporte))
             $variaveis['_SUPORTE_NOME_'] = $suporte['Usuario']['nome'];
         $search = array_keys($variaveis);
         $replace = array_values($variaveis);
