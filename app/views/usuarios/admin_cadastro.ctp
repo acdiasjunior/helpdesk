@@ -20,8 +20,8 @@ echo $this->Html->tag('/fieldset', null);
 echo $this->Html->tag('fieldset', null);
 echo $this->Html->tag('legend', 'Informações Login');
 echo $this->Form->input('username', array('label' => 'Login'));
-if(!isset($this->data['Usuario']))
-    echo $this->Form->input('password', array('label' => 'Senha'));
+if($this->params['action'] == 'admin_incluir')
+    echo $this->Form->input('password', array('label' => 'Senha', 'value' => ''));
 echo $this->Html->tag('/fieldset', null);
 
 echo $this->Form->button('Fechar', array(

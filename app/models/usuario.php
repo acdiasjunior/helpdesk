@@ -10,14 +10,8 @@ class Usuario extends AppModel {
         'Chamado',
         'ChamadosInteracao'
     );
-    var $actsAs = array('Containable');
+    //var $actsAs = array('Containable');
     var $validate = array(
-        'username' => array(
-            'unico' => array(
-                'rule' => array('isUnique'),
-                'message' => 'Nome de login já existe'
-            )
-        ),
         'username' => array(
             'unico' => array(
                 'rule' => array('isUnique'),

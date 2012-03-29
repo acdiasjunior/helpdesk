@@ -62,8 +62,8 @@ class UsuariosController extends AppController {
         if (!empty($this->data)) {
             if ($this->Usuario->save($this->data)) {
                 $this->Session->setFlash('Cadastro salvo.');
+                $this->redirect(array('controller' => $this->name, 'action' => 'index', 'admin' => true));
             }
-            $this->redirect(array('controller' => $this->name, 'action' => 'index'));
         }
         $this->render('admin_cadastro');
     }
