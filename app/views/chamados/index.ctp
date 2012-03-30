@@ -57,20 +57,17 @@ echo $javascript->link(array('flexigrid.pack', 'button'));
         {
             case "Interagir":
                 interagir(id, status, responsavel_id);
+                break;
         }
     }
     
     function interagir(id, status, responsavel_id) {
-        switch(status) {
-            case "<?php echo Chamado::statusChamado(Chamado::STATUS_ABERTO) ?>":
-                if(responsavel_id == '0') {
-                    if(confirm('Chamado ainda não atribuído.\nAtribuir e realizar o atendimento?'))
-                        document.location = '<?php echo $this->Html->url(array('controller' => $this->params['controller'], 'action' => 'atribuirChamado')); ?>/' + id;
-                } else {
-                    document.location = '<?php echo $this->Html->url(array('controller' => $this->params['controller'], 'action' => 'interagir')); ?>/' + id;
-                }
-                break;
-            }
+        if(status == "<?php echo Chamado::statusChamado(Chamado::STATUS_ABERTO) ?>" && responsavel_id == '0') {
+            if(confirm('Chamado ainda não atribuído.\nAtribuir e realizar o atendimento?'))
+                document.location = '<?php echo $this->Html->url(array('controller' => $this->params['controller'], 'action' => 'atribuirChamado')); ?>/' + id;
+        }else{
+            document.location = '<?php echo $this->Html->url(array('controller' => $this->params['controller'], 'action' => 'interagir')); ?>/' + id;
         }
+    }
         
 </script>
