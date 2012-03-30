@@ -1,25 +1,5 @@
 <?php
-/*
- * 
- */
-?>
-<script type="text/javascript">
-    $(function(){
-        $('#ChamadoSubcategoriaId').parent().hide();
-        $('#ChamadoCategoriaId').change(function (){
-            $('#ChamadoSubcategoriaId').parent().hide();
-            id = $(this).val();
-            $.ajax({
-                url: "<?php echo $this->Html->url(array('controller' => 'subcategorias', 'action' => 'listaSubcategorias')); ?>/" + id,
-                success: function(data){
-                    $("#ChamadoSubcategoriaId").html(data);
-                    $('#ChamadoSubcategoriaId').parent().show();
-                }
-            });
-        });
-    });
-</script>
-<?php
+
 $javascript->link(array('jquery.ui.datepicker-pt-BR', 'jquery.maskedinput-1.2.2.min', 'errormessage', 'maskinput', 'keycount'), false);
 
 echo $this->Form->create('Chamado');

@@ -14,8 +14,9 @@ $logado = $this->Session->check('Auth.Usuario');
         echo $this->Html->css('estilos');
         echo $this->Html->css('campos');
         echo $this->Html->css('menu');
-        echo $javascript->link(array('jquery-1.6.2.min', 'jquery-ui-1.8.12.custom.min', 'jquery-ui-timepicker-addon', 'jquery.ui.datepicker-pt-BR', 'hideflash', 'focusfirst'), true);
+        echo $javascript->link(array('configuracoes', 'jquery-1.6.2.min', 'jquery-ui-1.8.12.custom.min', 'jquery-ui-timepicker-addon', 'jquery.ui.datepicker-pt-BR', 'hideflash', 'focusfirst'), true);
         echo $scripts_for_layout;
+        echo $viewscript->incluir();
         ?>
     </head>
     <body>
@@ -32,11 +33,11 @@ $logado = $this->Session->check('Auth.Usuario');
                         <div class="menu">
                             <?php
                             if ($logado) {
-                                if($this->Session->read('Auth.Usuario.tipo_usuario') == Usuario::TIPO_USUARIO)
+                                if ($this->Session->read('Auth.Usuario.tipo_usuario') == Usuario::TIPO_USUARIO)
                                     echo $this->element('menu_logado_usuario');
-                                else if($this->Session->read('Auth.Usuario.tipo_usuario') == Usuario::TIPO_ADMINISTRADOR)
+                                else if ($this->Session->read('Auth.Usuario.tipo_usuario') == Usuario::TIPO_ADMINISTRADOR)
                                     echo $this->element('menu_logado_admin');
-                                else if($this->Session->read('Auth.Usuario.tipo_usuario') == Usuario::TIPO_SUPORTE)
+                                else if ($this->Session->read('Auth.Usuario.tipo_usuario') == Usuario::TIPO_SUPORTE)
                                     echo $this->element('menu_logado_suporte');
                             }
                             else
@@ -48,7 +49,7 @@ $logado = $this->Session->check('Auth.Usuario');
                             <?php
                             if ($logado) {
                                 echo 'Logado como: ' . $this->Session->read('Auth.Usuario.nome') . ' &nbsp;&nbsp;&nbsp;';
-                                echo $this->Html->link('Sair', array('admin' => false,'controller' => 'usuarios', 'action' => 'logout'), array('target' => '_parent', 'style' => 'color: white; text-decoration: none; font-weight: bold;'));
+                                echo $this->Html->link('Sair', array('admin' => false, 'controller' => 'usuarios', 'action' => 'logout'), array('target' => '_parent', 'style' => 'color: white; text-decoration: none; font-weight: bold;'));
                             }
                             ?>
                         </span>

@@ -3,7 +3,7 @@
 class AppController extends Controller {
 
     var $components = array('Session', 'Auth', 'RequestHandler');
-    var $helpers = array('Javascript', 'Js', 'Session', 'Html', 'Form', 'Formatacao');
+    var $helpers = array('Javascript', 'Js', 'Session', 'Html', 'Form', 'Formatacao', 'Viewscript');
 
     function __construct() {
         parent::__construct();
