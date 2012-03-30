@@ -350,7 +350,9 @@ class ChamadosController extends AppController {
         $user = $this->Usuario->find('first', array(
             'contain' => array(
                 'Grupo' => array(
-                    'Categoria'
+                    'Categoria' => array(
+                        'Subcategoria'
+                    )
                 )
             ),
             'conditions' => array(
@@ -359,7 +361,8 @@ class ChamadosController extends AppController {
                 ));
         $categorias = array();
         foreach ($user['Grupo']['Categoria'] as $categoria) {
-            $categorias[$categoria['id']] = $categoria['descricao'];
+            if (count($categoria['Subcategoria']) > 0)
+                $categorias[$categoria['id']] = $categoria['descricao'];
         }
         return $categorias;
     }
