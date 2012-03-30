@@ -17,7 +17,15 @@ class Chamado extends AppModel {
         'categoria_id' => array(
             'rule' => 'notEmpty',
             'message' => 'Você deve selecionar uma categoria.'
-        )
+        ),
+        'assunto' => array(
+            'rule' => 'notEmpty',
+            'message' => 'Você deve especificar um assunto.'
+        ),
+        'texto' => array(
+            'rule' => 'notEmpty',
+            'message' => 'Você deve descrever o seu problema.'
+        ),
     );
 
     static function trocaVariaveis($dados, $body, $suporte = null) {
