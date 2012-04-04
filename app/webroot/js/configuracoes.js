@@ -2,4 +2,4 @@
  * Arquivo de configurações a ser utilizado por outros scripts
  */
 
-var webroot = '/helpdesk/';
+var webroot = '/helpdesk';

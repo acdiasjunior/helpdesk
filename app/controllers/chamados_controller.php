@@ -3,21 +3,6 @@
 class ChamadosController extends AppController {
 
     var $name = 'Chamados';
-    var $components = array(
-        'Email' => array(
-            'smtpOptions' => array(
-                'port' => '465',
-                'timeout' => '30',
-                'host' => 'ssl://smtp.googlemail.com',
-                'username' => 'helpdesk@virtualbs.com.br',
-                'password' => 'virtual3435',
-            ),
-            'sendAs' => 'text',
-            'delivery' => 'smtp',
-            'from' => 'HelpDesk Virtual <helpdesk@virtualbs.com.br>',
-            'replyTo' => 'Suporte Infra <infra@virtualbs.com.br>',
-        )
-    );
 
     function admin_index() {
         $this->set('title_for_layout', 'Todos os chamados');
@@ -132,26 +117,22 @@ class ChamadosController extends AppController {
     }
 
     function abrir() {
+        $categorias = $this->categoriasUsuario();
+        $this->set(compact('categorias'));
+    }
+    
+    function abrirChamado(){
         if (!empty($this->data)) {
             $this->Chamado->set('ip', $this->RequestHandler->getClientIP());
             $this->Chamado->set('status', Chamado::STATUS_ABERTO);
             $this->Chamado->set('data_abertura', date('d/m/Y H:i:s'));
             if ($this->Chamado->save($this->data)) {
-                $this->Chamado->contain(array(
-                    'Usuario' => array(
-                        'Grupo',
-                    ),
-                    'Subcategoria' => array(
-                        'Categoria',
-                    ),
-                ));
-                $this->enviarEmailAberturaChamadoUsuario($this->Chamado->read());
-                $this->Session->setFlash('Chamado aberto!');
-                $this->redirect(array('controller' => $this->name, 'action' => 'index'));
+                $this->Session->setFlash('Chamado aberto.');
+            } else {
+                $this->Session->setFlash('Ocorreu um erro ao abrir o chamado!');
             }
         }
-        $categorias = $this->categoriasUsuario();
-        $this->set(compact('categorias'));
+        $this->redirect(array('controller' => $this->name, 'action' => 'index'));
     }
 
     function interagir($id = null) {
@@ -187,8 +168,7 @@ class ChamadosController extends AppController {
                 $this->Chamado->id = $this->data['ChamadosInteracao']['chamado_id'];
                 $this->Chamado->set('status', $this->data['Chamado']['status']);
                 if ($this->Chamado->save()) {
-                    $this->enviarEmailInteracaoUsuario($this->Chamado->ChamadosInteracao->read());
-                    $this->Session->setFlash('Cadastro salvo.');
+                    $this->Session->setFlash('Interação adicionada.');
                     $this->redirect(array('controller' => $this->name, 'action' => 'interagir', $this->Chamado->id));
                 }
             }
@@ -228,8 +208,7 @@ class ChamadosController extends AppController {
                 $this->Chamado->id = $this->data['ChamadosInteracao']['chamado_id'];
                 $this->Chamado->set('status', $this->data['Chamado']['status']);
                 if ($this->Chamado->save()) {
-                    $this->enviarEmailInteracaoUsuario($this->Chamado->ChamadosInteracao->read());
-                    $this->Session->setFlash('Cadastro salvo.');
+                    $this->Session->setFlash('Interação adicionada.');
                     $this->redirect(array('controller' => $this->name, 'action' => 'interagir', $this->Chamado->id));
                 }
             }
@@ -246,8 +225,7 @@ class ChamadosController extends AppController {
             $responsavel = $this->Session->read('Auth.Usuario');
             $this->Chamado->set('responsavel_id', $responsavel['id']);
             if ($this->Chamado->save()) {
-                $this->enviarEmailAberturaChamadoUsuario($this->Chamado->read());
-                $this->Session->setFlash('Cadastro salvo.');
+                $this->Session->setFlash('Chamado atribuído.');
                 $this->redirect(array('controller' => $this->name, 'action' => 'interagir', $id));
             } else {
                 $this->Session->setFlash('Erro ao atribuir chamado.');
@@ -284,63 +262,6 @@ class ChamadosController extends AppController {
     function fechados() {
         $this->set('title_for_layout', 'Chamados abertos');
         $this->render('index');
-    }
-
-    function enviarEmailInteracaoUsuario($interacao) {
-        $this->loadModel('Modelo');
-        $this->autoRender = false;
-        $this->Email->to = "{$interacao['Usuario']['nome']} <{$interacao['Usuario']['email']}>";
-        $this->Email->subject = "HelpDesk - Nova interação - Chamado #{$interacao['Chamado']['id']}";
-        $body = $this->Modelo->find('first', array('conditions' => array('nome' => 'interacao_usuario')));
-        $body = Chamado::trocaVariaveis($interacao, $body['Modelo']['texto']);
-        $this->Email->send($body);
-        var_dump($this->Email->smtpError);
-    }
-
-    function enviarEmailAberturaChamadoUsuario($chamado) {
-        $this->loadModel('Modelo');
-        $this->autoRender = false;
-        $this->Email->to = "{$chamado['Usuario']['nome']} <{$chamado['Usuario']['email']}>";
-        $this->Email->subject = "HelpDesk - Novo chamado - Chamado #{$chamado['Chamado']['id']}";
-        $body = $this->Modelo->find('first', array('conditions' => array('nome' => 'abertura_chamado_usuario')));
-        $body = Chamado::trocaVariaveis($chamado, $body['Modelo']['texto']);
-        $this->Email->send($body);
-        if (empty($this->Email->smtpError)) {
-            $this->enviarEmailAberturaChamadoSuporte($chamado);
-        } else {
-            $this->Session->setFlash('Erro ao enviar email.');
-            $this->redirect(array('action' => 'index'));
-        }
-    }
-
-    function enviarEmailAberturaChamadoSuporte($chamado) {
-        $this->autoRender = false;
-        $admins = $this->Chamado->Usuario->find('all', array(
-            'fields' => array(
-                'Usuario.nome',
-                'Usuario.email'
-            ),
-            'conditions' => array(
-                'OR' => array(
-                    'Usuario.tipo_usuario' => Usuario::TIPO_SUPORTE,
-                    'Usuario.tipo_usuario' => Usuario::TIPO_ADMINISTRADOR,
-                )
-            )
-                )
-        );
-
-        foreach ($admins as $suporte) {
-            $this->Email->reset();
-            $this->Email->to = "{$suporte['Usuario']['nome']} <{$suporte['Usuario']['email']}>";
-            $this->Email->subject = "HelpDesk - Novo chamado - Chamado #{$chamado['Chamado']['id']}";
-            $body = $this->Modelo->find('first', array('conditions' => array('nome' => 'abertura_chamado_suporte')));
-            $body = Chamado::trocaVariaveis($chamado, $body['Modelo']['texto'], $suporte);
-            $this->Email->send($body);
-            if (!empty($this->Email->smtpError)) {
-                $this->Session->setFlash('Erro ao enviar email.');
-                $this->redirect(array('action' => 'index'));
-            }
-        }
     }
 
     private function categoriasUsuario() {
