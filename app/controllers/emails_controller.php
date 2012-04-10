@@ -22,10 +22,10 @@ class EmailsController extends AppController {
 
     function enviarEmailInteracaoUsuario() {
         $this->loadModel('Modelo');
-        $this->loadModel('Interacao');
+        $this->loadModel('ChamadosInteracao');
 
-        $interacoes = $this->Interacao->find('list', array('conditions' => array('Interacao.email_enviado' => false)));
-
+        $interacoes = $this->ChamadosInteracao->find('list', array('conditions' => array('ChamadosInteracao.email_enviado' => false)));
+        
         foreach ($interacoes as $id) {
             set_time_limit(30);
             $this->Interacao->id = $id;
@@ -40,7 +40,6 @@ class EmailsController extends AppController {
     }
 
     function enviarEmailAberturaChamadoUsuario() {
-        $this->autoRender = false;
         $this->loadModel('Modelo');
         $this->loadModel('Chamado');
 
@@ -68,7 +67,6 @@ class EmailsController extends AppController {
     }
 
     function enviarEmailAberturaChamadoSuporte($chamado) {
-        $this->autoRender = false;
         $admins = $this->Chamado->Usuario->find('all', array(
             'fields' => array(
                 'Usuario.nome',
@@ -98,6 +96,7 @@ class EmailsController extends AppController {
     }
 
     function beforeFilter() {
+        $this->autoRender = false;
         $this->Auth->autoRedirect = false;
         parent::beforeFilter();
         $this->Auth->allow(array(
