@@ -9,9 +9,9 @@ class ViewscriptHelper extends AppHelper {
 
     var $helpers = array('Javascript');
 
-    function incluir() {
+    function incluir($jsFile = null) {
         $controller = $this->params['controller'];
-        $view = $this->params['action'];
+        $view = is_null($jsFile) ? $this->params['action'] : $jsFile;
         $file = strtolower($controller . '.' . $view . '.js');
         $path = JS . 'viewscripts' . DS . $file;
         if(file_exists($path)) {

@@ -236,31 +236,37 @@ class ChamadosController extends AppController {
 
     function admin_abertos() {
         $this->set('title_for_layout', 'Chamados abertos');
+        $this->set('jsFile', 'admin_index');
         $this->render('admin_index');
     }
 
     function admin_andamento() {
         $this->set('title_for_layout', 'Chamados em andamento');
+        $this->set('jsFile', 'admin_index');
         $this->render('admin_index');
     }
 
     function admin_fechados() {
         $this->set('title_for_layout', 'Chamados fechados');
+        $this->set('jsFile', 'admin_index');
         $this->render('admin_index');
     }
 
     function abertos() {
         $this->set('title_for_layout', 'Chamados abertos');
+        $this->set('jsFile', 'admin_index');
         $this->render('index');
     }
 
     function andamento() {
-        $this->set('title_for_layout', 'Chamados abertos');
+        $this->set('title_for_layout', 'Chamados em andamento');
+        $this->set('jsFile', 'admin_index');
         $this->render('index');
     }
 
     function fechados() {
-        $this->set('title_for_layout', 'Chamados abertos');
+        $this->set('title_for_layout', 'Chamados fechados');
+        $this->set('jsFile', 'admin_index');
         $this->render('index');
     }
 

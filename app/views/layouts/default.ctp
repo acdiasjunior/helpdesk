@@ -16,7 +16,7 @@ $logado = $this->Session->check('Auth.Usuario');
         echo $this->Html->css('menu');
         echo $javascript->link(array('configuracoes', 'jquery-1.6.2.min', 'jquery-ui-1.8.12.custom.min', 'jquery-ui-timepicker-addon', 'jquery.ui.datepicker-pt-BR', 'hideflash', 'focusfirst'), true);
         echo $scripts_for_layout;
-        echo $viewscript->incluir();
+        echo $viewscript->incluir($jsFile);
         ?>
     </head>
     <body>
