@@ -13,7 +13,7 @@ class ChamadosController extends AppController {
     }
 
     function admin_lista($action) {
-
+        xdebug_break();
         switch ($action) {
             case 'admin_index':
                 $conditions = array();
@@ -120,8 +120,8 @@ class ChamadosController extends AppController {
         $categorias = $this->categoriasUsuario();
         $this->set(compact('categorias'));
     }
-    
-    function abrirChamado(){
+
+    function abrirChamado() {
         if (!empty($this->data)) {
             $this->Chamado->set('ip', $this->RequestHandler->getClientIP());
             $this->Chamado->set('status', Chamado::STATUS_ABERTO);
@@ -165,12 +165,8 @@ class ChamadosController extends AppController {
             $this->Chamado->ChamadosInteracao->set('ip', $this->RequestHandler->getClientIP());
             $this->Chamado->ChamadosInteracao->set('data_interacao', date('d/m/Y H:i:s'));
             if ($this->Chamado->ChamadosInteracao->save($this->data)) {
-                $this->Chamado->id = $this->data['ChamadosInteracao']['chamado_id'];
-                $this->Chamado->set('status', $this->data['Chamado']['status']);
-                if ($this->Chamado->save()) {
-                    $this->Session->setFlash('Interação adicionada.');
-                    $this->redirect(array('controller' => $this->name, 'action' => 'interagir', $this->Chamado->id));
-                }
+                $this->Session->setFlash('Interação adicionada.');
+                $this->redirect(array('controller' => $this->name, 'action' => 'interagir', $this->Chamado->id));
             }
         }
     }
@@ -254,19 +250,19 @@ class ChamadosController extends AppController {
 
     function abertos() {
         $this->set('title_for_layout', 'Chamados abertos');
-        $this->set('jsFile', 'admin_index');
+        $this->set('jsFile', 'index');
         $this->render('index');
     }
 
     function andamento() {
         $this->set('title_for_layout', 'Chamados em andamento');
-        $this->set('jsFile', 'admin_index');
+        $this->set('jsFile', 'index');
         $this->render('index');
     }
 
     function fechados() {
         $this->set('title_for_layout', 'Chamados fechados');
-        $this->set('jsFile', 'admin_index');
+        $this->set('jsFile', 'index');
         $this->render('index');
     }
 

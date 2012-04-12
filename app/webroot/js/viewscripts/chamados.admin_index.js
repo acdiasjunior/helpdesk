@@ -1,6 +1,6 @@
 $(document).ready(function(){
     $("#flex").flexigrid({
-        url: webroot + '/chamados/lista/' + filtro,
+        url: webroot + '/admin/chamados/lista/' + filtro,
         dataType: 'json',
         colModel : [
         {
@@ -122,9 +122,9 @@ $(document).ready(function(){
     function interagir(id, status, responsavel_id) {
         if(status == "Aberto" && responsavel_id == '0') {
             if(confirm('Chamado ainda não atribuído.\nAtribuir e realizar o atendimento?'))
-                document.location = webroot + '/chamados/atribuirChamado/' + id;
+                document.location = webroot + '/admin/chamados/atribuirChamado/' + id;
         } else {
-            document.location = webroot + '/chamados/interagir/' + id;
+            document.location = webroot + '/admin/chamados/interagir/' + id;
         }
     }
 });
