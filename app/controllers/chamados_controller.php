@@ -13,7 +13,7 @@ class ChamadosController extends AppController {
     }
 
     function admin_lista($action) {
-        xdebug_break();
+
         switch ($action) {
             case 'admin_index':
                 $conditions = array();
