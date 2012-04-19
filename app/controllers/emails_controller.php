@@ -25,7 +25,7 @@ class EmailsController extends AppController {
         $this->loadModel('ChamadosInteracao');
 
         $interacoes = $this->ChamadosInteracao->find('list', array('conditions' => array('ChamadosInteracao.email_enviado' => false)));
-        
+
         foreach ($interacoes as $id) {
             set_time_limit(30);
             $this->ChamadosInteracao->id = $id;
@@ -38,8 +38,7 @@ class EmailsController extends AppController {
             if (empty($this->Email->smtpError)) {
                 $interacao['ChamadosInteracao']['email_enviado'] = true;
                 $this->ChamadosInteracao->save($interacao);
-                // Implementar
-                // $this->enviarEmailInteracaoSuporte($interacao);
+                $this->enviarEmailInteracaoSuporte($interacao);
             }
         }
     }
@@ -88,6 +87,39 @@ class EmailsController extends AppController {
             $this->Email->subject = "HelpDesk - Novo chamado - Chamado #{$chamado['Chamado']['id']}";
             $body = $this->Modelo->find('first', array('conditions' => array('nome' => 'abertura_chamado_suporte')));
             $body = Chamado::trocaVariaveis($chamado, $body['Modelo']['texto'], $suporte);
+            $this->Email->send($body);
+        }
+    }
+
+    function enviarEmailInteracaoSuporte($interacao) {
+        
+        $this->ChamadosInteracao->Usuario->recursive = 0;
+        
+        if (is_null($interacao['Chamado']['responsavel_id'])) {
+            $admins = $this->ChamadosInteracao->Usuario->find('all', array(
+                'fields' => array(
+                    'Usuario.nome',
+                    'Usuario.email'
+                ),
+                'conditions' => array(
+                    'OR' => array(
+                        'Usuario.tipo_usuario' => Usuario::TIPO_SUPORTE,
+                        'Usuario.tipo_usuario' => Usuario::TIPO_ADMINISTRADOR,
+                    )
+                )
+                    )
+            );
+        } else {
+            $this->ChamadosInteracao->Usuario->id = $interacao['Chamado']['responsavel_id'];
+            $admins = $this->ChamadosInteracao->Usuario->read();
+        }
+        
+        foreach ($admins as $suporte) {
+            $this->Email->reset();
+            $this->Email->to = "{$suporte['Usuario']['nome']} <{$suporte['Usuario']['email']}>";
+            $this->Email->subject = "HelpDesk - Nova interação - Chamado #{$interacao['Chamado']['id']}";
+            $body = $this->Modelo->find('first', array('conditions' => array('nome' => 'interacao_suporte')));
+            $body = Chamado::trocaVariaveis($interacao, $body['Modelo']['texto'], $suporte);
             $this->Email->send($body);
         }
     }
