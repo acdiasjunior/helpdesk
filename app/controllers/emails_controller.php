@@ -28,14 +28,19 @@ class EmailsController extends AppController {
         
         foreach ($interacoes as $id) {
             set_time_limit(30);
-            $this->Interacao->id = $id;
-            $interacao = $this->Interacao->read();
-            $this->autoRender = false;
+            $this->ChamadosInteracao->id = $id;
+            $interacao = $this->ChamadosInteracao->read();
             $this->Email->to = "{$interacao['Usuario']['nome']} <{$interacao['Usuario']['email']}>";
             $this->Email->subject = "HelpDesk - Nova interação - Chamado #{$interacao['Chamado']['id']}";
             $body = $this->Modelo->find('first', array('conditions' => array('nome' => 'interacao_usuario')));
             $body = Chamado::trocaVariaveis($interacao, $body['Modelo']['texto']);
             $this->Email->send($body);
+            if (empty($this->Email->smtpError)) {
+                $interacao['ChamadosInteracao']['email_enviado'] = true;
+                $this->ChamadosInteracao->save($interacao);
+                // Implementar
+                // $this->enviarEmailInteracaoSuporte($interacao);
+            }
         }
     }
 
@@ -49,7 +54,6 @@ class EmailsController extends AppController {
             set_time_limit(30);
             $this->Chamado->id = $id;
             $chamado = $this->Chamado->read();
-            $this->autoRender = false;
             $this->Email->to = "{$chamado['Usuario']['nome']} <{$chamado['Usuario']['email']}>";
             $this->Email->subject = "HelpDesk - Novo chamado - Chamado #{$chamado['Chamado']['id']}";
             $body = $this->Modelo->find('first', array('conditions' => array('nome' => 'abertura_chamado_usuario')));
@@ -59,9 +63,6 @@ class EmailsController extends AppController {
                 $chamado['Chamado']['email_enviado'] = true;
                 $this->Chamado->save($chamado);
                 $this->enviarEmailAberturaChamadoSuporte($chamado);
-            } else {
-                $this->Session->setFlash('Erro ao enviar email.');
-                $this->redirect(array('action' => 'index'));
             }
         }
     }
@@ -88,10 +89,6 @@ class EmailsController extends AppController {
             $body = $this->Modelo->find('first', array('conditions' => array('nome' => 'abertura_chamado_suporte')));
             $body = Chamado::trocaVariaveis($chamado, $body['Modelo']['texto'], $suporte);
             $this->Email->send($body);
-            if (!empty($this->Email->smtpError)) {
-                $this->Session->setFlash('Erro ao enviar email.');
-                $this->redirect(array('action' => 'index'));
-            }
         }
     }
 
