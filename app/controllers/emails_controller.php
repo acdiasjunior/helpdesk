@@ -92,9 +92,7 @@ class EmailsController extends AppController {
     }
 
     function enviarEmailInteracaoSuporte($interacao) {
-        
-        $this->ChamadosInteracao->Usuario->recursive = 0;
-        
+
         if (is_null($interacao['Chamado']['responsavel_id'])) {
             $admins = $this->ChamadosInteracao->Usuario->find('all', array(
                 'fields' => array(
@@ -110,10 +108,14 @@ class EmailsController extends AppController {
                     )
             );
         } else {
-            $this->ChamadosInteracao->Usuario->id = $interacao['Chamado']['responsavel_id'];
-            $admins = $this->ChamadosInteracao->Usuario->read();
+            $admins = $this->ChamadosInteracao->Usuario->read(
+                    array(
+                        'Usuario.nome',
+                        'Usuario.email'
+                    ), $interacao['Chamado']['responsavel_id']
+            );
         }
-        
+
         foreach ($admins as $suporte) {
             $this->Email->reset();
             $this->Email->to = "{$suporte['Usuario']['nome']} <{$suporte['Usuario']['email']}>";
