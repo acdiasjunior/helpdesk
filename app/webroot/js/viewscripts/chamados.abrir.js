@@ -20,7 +20,7 @@ $(document).ready(function() {
         },
         messages: {
             'data[Chamado][categoria_id]' : {required: 'Você deve selecionar uma categoria.'},
-            'data[Chamado][assunto]' : {required: 'Por favor, informe o assunto.'},
+            'data[Chamado][assunto]' : {required: 'Por favor, informe o título.'},
             'data[Chamado][texto]' : {required: 'Escreva uma descrição do problema.'}
         }
     });

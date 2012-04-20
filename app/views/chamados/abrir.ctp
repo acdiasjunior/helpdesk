@@ -16,7 +16,7 @@ echo $this->Html->tag('legend', 'Dados do Chamado');
 echo $this->Form->input('categoria_id', array('label' => 'Categoria do Chamado', 'empty' => 'Selecione uma categoria'));
 echo $this->Form->input('subcategoria_id', array('label' => 'Subcategoria'));
 echo $this->Html->div('', '', array('style' => 'clear: both;'));
-echo $this->Form->input('assunto', array('label' => 'Assunto (Faça uma breve descrição do problema)', 'class' => 'edit100'));
+echo $this->Form->input('assunto', array('label' => 'Título', 'class' => 'edit100'));
 echo $this->Form->input('texto', array('label' => 'Descrição', 'type' => 'textarea', 'rows' => '7', 'maxchar' => 4096, 'class' => 'edit100 keycount'));
 echo $this->Html->tag('/fieldset', null);
 
