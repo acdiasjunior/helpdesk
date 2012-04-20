@@ -337,7 +337,7 @@ div.checkbox {
     border: 1px solid gray;
 }
 
-table .key, table .value, table .assunto {
+table .key, table .value, table .titulo {
     padding: 4px;
     background-color: #BDC;
 }

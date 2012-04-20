@@ -18,9 +18,9 @@ class Chamado extends AppModel {
             'rule' => 'notEmpty',
             'message' => 'Você deve selecionar uma categoria.'
         ),
-        'assunto' => array(
+        'titulo' => array(
             'rule' => 'notEmpty',
-            'message' => 'Você deve especificar um assunto.'
+            'message' => 'Você deve especificar um titulo.'
         ),
         'texto' => array(
             'rule' => 'notEmpty',
@@ -37,7 +37,7 @@ class Chamado extends AppModel {
             '_USUARIO_GRUPO_' => $dados['Usuario']['Grupo']['nome'],
             '_CHAMADO_CATEGORIA_' => $dados['Subcategoria']['Categoria']['descricao'],
             '_CHAMADO_SUBCATEGORIA_' => $dados['Subcategoria']['descricao'],
-            '_CHAMADO_ASSUNTO_' => $dados['Chamado']['assunto'],
+            '_CHAMADO_TITULO_' => $dados['Chamado']['titulo'],
             '_CHAMADO_TEXTO_' => $dados['Chamado']['texto'],
         );
         if (!is_null($suporte))

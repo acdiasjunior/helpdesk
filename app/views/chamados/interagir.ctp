@@ -39,7 +39,7 @@ echo $this->Html->tag('legend', 'Dados do chamado');
     </tr>
     <tr>
         <td class="key">Assunto:</td>
-        <td class="assunto" colspan="4"><?php echo $this->data['Chamado']['assunto']; ?></td>
+        <td class="titulo" colspan="4"><?php echo $this->data['Chamado']['titulo']; ?></td>
     </tr>
     <tr>
         <td class="key">Categoria:</td>
