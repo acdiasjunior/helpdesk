@@ -1,6 +1,6 @@
 $(document).ready(function(){
     $("#flex").flexigrid({
-        url: webroot + '/admin/chamados/lista/' + filtro,
+        url: webroot + '/chamados/lista/' + filtro,
         dataType: 'json',
         colModel : [
         {
@@ -13,25 +13,8 @@ $(document).ready(function(){
         },
 
         {
-            display: 'Responsável ID', 
-            name : 'Responsavel.id', 
-            width : 150, 
-            sortable : true, 
-            align: 'left', 
-            hide: true
-        },
-
-        {
             display: 'Responsável', 
             name : 'Responsavel.nome', 
-            width : 150, 
-            sortable : true, 
-            align: 'left'
-        },
-
-        {
-            display: 'Usuário', 
-            name : 'Usuario.nome', 
             width : 150, 
             sortable : true, 
             align: 'left'
@@ -87,7 +70,7 @@ $(document).ready(function(){
         useRp: true,
         rp: 15,
         rpOptions: [15,30,50,100],
-        title: 'Chamados abertos',
+        title: '<?php echo $title_for_layout; ?>',
         width: 920,
         height: 370,
         singleSelect: true,
@@ -103,28 +86,22 @@ $(document).ready(function(){
     $('#flex').click( function(){
         var id = $('.trSelected').find('td[abbr="Chamado.id"]').text();
         var status = $('.trSelected').find('td[abbr="Chamado.status"]').text();
-        var responsavel_id = $('.trSelected').find('td[abbr="Responsavel.id"]').text();
         if(id != '')
-            interagir(id, status, responsavel_id);
+            interagir(id, status);
     });
     
     function actions(com, grid) {
         var id = $('.trSelected', grid).find('td[abbr="Chamado.id"]').text();
         var status = $('.trSelected', grid).find('td[abbr="Chamado.status"]').text();
-        var responsavel_id = $('.trSelected', grid).find('td[abbr="Responsavel.id"]').text();
         switch(com)
         {
             case "Interagir":
-                interagir(id, status, responsavel_id);
+                interagir(id, status);
+                break;
         }
     }
     
-    function interagir(id, status, responsavel_id) {
-        if(status == "Aberto" && responsavel_id == '0') {
-            if(confirm('Chamado ainda não atribuído.\nAtribuir e realizar o atendimento?'))
-                document.location = webroot + '/admin/chamados/atribuirChamado/' + id;
-        } else {
-            document.location = webroot + '/admin/chamados/interagir/' + id;
-        }
+    function interagir(id, status) {
+        document.location = webroot + '/chamados/interagir/' + id;
     }
 });
