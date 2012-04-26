@@ -68,6 +68,19 @@ class UsuariosController extends AppController {
         $this->render('admin_cadastro');
     }
 
+    function admin_mudarSenha() {
+        if (!empty($this->data)) {
+            $this->Usuario->set('password', $this->Auth->password($this->data['Usuario']['nova_senha']));
+            if ($this->Usuario->save($this->data)) {
+                $this->Session->setFlash('Senha alterada com sucesso!');
+            } else {
+                $this->Session->setFlash('Erro ao alterar senha do usuário!');
+            }
+            $this->redirect(array('controller' => $this->name, 'action' => 'index', 'admin' => true));
+        }
+        $this->render('admin_index');
+    }
+
     function admin_editar($id = null) {
         if (empty($this->data)) {
             if (is_null($id))

@@ -18,10 +18,10 @@ class Usuario extends AppModel {
                 'message' => 'Nome de login já existe'
             )
         ),
-        'password' => array(
-            'rule' => array('minLength', '6'),
-            'message' => 'Senha deve conter ao menos 6 caracteres'
-        ),
+//        'password' => array(
+//            'rule' => array('minLength', '6'),
+//            'message' => 'Senha deve conter ao menos 6 caracteres'
+//        ),
         'email' => array(
             'unico' => array(
                 'rule' => array('isUnique'),

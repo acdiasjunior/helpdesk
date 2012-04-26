@@ -2,6 +2,15 @@
 echo $this->Html->css(array('flexigrid'));
 echo $javascript->link(array('flexigrid.pack', 'button'));
 ?>
+<div id="alterarSenha" title="Alterar Senha do Usuário" style="display: none;">
+    <?php
+    echo $this->Form->create('Usuario', array('action' => 'mudarSenha', 'admin' => true));
+    echo $this->Form->hidden('id');
+    echo $this->Form->input('nova_senha', array('label' => 'Senha', 'value' => '', 'type' => 'password'));
+    echo $this->Form->end();
+    ?>
+    <span>Insira a nova senha para o usuário.</span>
+</div>
 <table id="flex" style="display: none"></table> 
 <script type="text/javascript">
     $("#flex").flexigrid({
@@ -21,6 +30,8 @@ echo $javascript->link(array('flexigrid.pack', 'button'));
             {name: 'Editar', bclass: 'edit', onpress : actions},
             {separator: true},
             {name: 'Excluir', bclass: 'delete', onpress : actions},
+            {separator: true},
+            {name: 'Senha', bclass: 'edit', onpress : actions},
             {separator: true}
         ],
         searchitems : [
@@ -77,6 +88,31 @@ echo $javascript->link(array('flexigrid.pack', 'button'));
                 else
                     alert('Selecione um registro primeiro!');
                 break;
+            case "Senha":
+                if(id != '')
+                {
+                    $("#UsuarioId").val(id);
+                    $("#alterarSenha").dialog("open");
+                }
+                else
+                    alert('Selecione um registro primeiro!');
+                break;
             }
         }
+        
+        $(function() {
+            $("#alterarSenha").dialog({
+                resizable: false,
+                modal: true,
+                autoOpen: false,
+                buttons: {
+                    "Alterar Senha": function() {
+                        $('#UsuarioMudarSenhaForm').submit();
+                    },
+                    "Cancelar": function() {
+                        $( this ).dialog( "close" );
+                    }
+                }
+            });
+        });
 </script>
