@@ -1,4 +1,7 @@
 $(document).ready(function(){
+
+    var filtro = 'abertos';
+    
     $("#flex").flexigrid({
         url: webroot + '/chamados/lista/' + filtro,
         dataType: 'json',
@@ -11,7 +14,6 @@ $(document).ready(function(){
             align: 'center', 
             hide: false
         },
-
         {
             display: 'Responsável', 
             name : 'Responsavel.nome', 
@@ -19,7 +21,6 @@ $(document).ready(function(){
             sortable : true, 
             align: 'left'
         },
-
         {
             display: 'Categoria', 
             name : 'Categoria.descricao', 
@@ -27,7 +28,6 @@ $(document).ready(function(){
             sortable : true, 
             align: 'left'
         },
-
         {
             display: 'Status', 
             name : 'Chamado.status', 
@@ -42,7 +42,6 @@ $(document).ready(function(){
             bclass: 'edit', 
             onpress : actions
         },
-
         {
             separator: true
         }
@@ -53,12 +52,10 @@ $(document).ready(function(){
             name : 'Usuario.nome', 
             isdefault: true
         },
-
         {
             display: 'Responsável', 
             name : 'Responsavel.nome'
         },
-
         {
             display: 'Categoria', 
             name : 'Categoria.descricao'
@@ -104,4 +101,12 @@ $(document).ready(function(){
     function interagir(id, status) {
         document.location = webroot + '/chamados/interagir/' + id;
     }
+    
+    $('#filtrar').click(function(){
+        filtro = $('#filtro').val();
+        $("#flex").flexOptions({
+            url: webroot + '/chamados/lista/' + filtro
+        });
+        $("#flex").flexReload();
+    });
 });

@@ -1,4 +1,7 @@
 $(document).ready(function(){
+    
+    var filtro = 'admin_abertos';
+    
     $("#flex").flexigrid({
         url: webroot + '/admin/chamados/lista/' + filtro,
         dataType: 'json',
@@ -11,7 +14,6 @@ $(document).ready(function(){
             align: 'center', 
             hide: false
         },
-
         {
             display: 'Responsável ID', 
             name : 'Responsavel.id', 
@@ -20,7 +22,6 @@ $(document).ready(function(){
             align: 'left', 
             hide: true
         },
-
         {
             display: 'Responsável', 
             name : 'Responsavel.nome', 
@@ -28,7 +29,6 @@ $(document).ready(function(){
             sortable : true, 
             align: 'left'
         },
-
         {
             display: 'Usuário', 
             name : 'Usuario.nome', 
@@ -36,7 +36,6 @@ $(document).ready(function(){
             sortable : true, 
             align: 'left'
         },
-
         {
             display: 'Categoria', 
             name : 'Categoria.descricao', 
@@ -44,7 +43,6 @@ $(document).ready(function(){
             sortable : true, 
             align: 'left'
         },
-
         {
             display: 'Status', 
             name : 'Chamado.status', 
@@ -59,7 +57,6 @@ $(document).ready(function(){
             bclass: 'edit', 
             onpress : actions
         },
-
         {
             separator: true
         }
@@ -70,12 +67,10 @@ $(document).ready(function(){
             name : 'Usuario.nome', 
             isdefault: true
         },
-
         {
             display: 'Responsável', 
             name : 'Responsavel.nome'
         },
-
         {
             display: 'Categoria', 
             name : 'Categoria.descricao'
@@ -127,4 +122,12 @@ $(document).ready(function(){
             document.location = webroot + '/admin/chamados/interagir/' + id;
         }
     }
+    
+    $('#filtrar').click(function(){
+        filtro = $('#filtro').val();
+        $("#flex").flexOptions({
+            url: webroot + '/admin/chamados/lista/' + filtro
+        });
+        $("#flex").flexReload();
+    });
 });

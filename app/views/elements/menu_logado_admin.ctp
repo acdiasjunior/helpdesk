@@ -46,16 +46,7 @@
         <a href="#" class="hide pai">Chamados</a>
         <ul>
             <li>
-                <a href="<?php echo $this->Html->url(array('admin' => true, 'controller' => 'chamados', 'action' => 'abertos')); ?>">Abertos</a>
-            </li>
-            <li>
-                <a href="<?php echo $this->Html->url(array('admin' => true, 'controller' => 'chamados', 'action' => 'andamento')); ?>">Em andamento</a>
-            </li>
-            <li>
-                <a href="<?php echo $this->Html->url(array('admin' => true, 'controller' => 'chamados', 'action' => 'fechados')); ?>">Fechados</a>
-            </li>
-            <li>
-                <a href="<?php echo $this->Html->url(array('admin' => true, 'controller' => 'chamados', 'action' => 'index')); ?>">Todos</a>
+                <a href="<?php echo $this->Html->url(array('admin' => true, 'controller' => 'chamados', 'action' => 'index')); ?>">Exbir Chamados</a>
             </li>
         </ul>
     </li>

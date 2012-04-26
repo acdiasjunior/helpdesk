@@ -11,16 +11,7 @@
                 <a href="<?php echo $this->Html->url(array('controller' => 'chamados', 'action' => 'abrir')); ?>" class="hide">Abrir Chamado</a>
             </li>
             <li>
-                <a href="<?php echo $this->Html->url(array('controller' => 'chamados', 'action' => 'abertos')); ?>" class="hide">Abertos</a>
-            </li>
-            <li>
-                <a href="<?php echo $this->Html->url(array('controller' => 'chamados', 'action' => 'andamento')); ?>" class="hide">Em andamento</a>
-            </li>
-            <li>
-                <a href="<?php echo $this->Html->url(array('controller' => 'chamados', 'action' => 'fechados')); ?>" class="hide">Fechados</a>
-            </li>
-            <li>
-                <a href="<?php echo $this->Html->url(array('controller' => 'chamados', 'action' => 'index')); ?>" class="hide">Todos</a>
+                <a href="<?php echo $this->Html->url(array('controller' => 'chamados', 'action' => 'index')); ?>" class="hide">Exibir Chamados</a>
             </li>
         </ul>
     </li>

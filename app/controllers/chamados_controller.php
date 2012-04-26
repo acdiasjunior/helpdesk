@@ -12,12 +12,9 @@ class ChamadosController extends AppController {
         $this->set('title_for_layout', 'Todos os chamados');
     }
 
-    function admin_lista($action) {
+    function admin_lista($action = 'admin_abertos') {
 
         switch ($action) {
-            case 'admin_index':
-                $conditions = array();
-                break;
             case 'admin_abertos':
                 $conditions = array('Chamado.status' => Chamado::STATUS_ABERTO);
                 break;
@@ -26,6 +23,9 @@ class ChamadosController extends AppController {
                 break;
             case 'admin_fechados':
                 $conditions = array('Chamado.status' => Chamado::STATUS_FECHADO);
+                break;
+            case 'admin_todos':
+                $conditions = array();
                 break;
         }
 
@@ -64,11 +64,9 @@ class ChamadosController extends AppController {
         $this->set(compact('chamados', 'page', 'total'));
     }
 
-    function lista($action) {
+    function lista($action = 'abertos') {
+        
         switch ($action) {
-            case 'index':
-                $conditions = array();
-                break;
             case 'abertos':
                 $conditions = array('Chamado.status' => Chamado::STATUS_ABERTO);
                 break;
@@ -77,6 +75,9 @@ class ChamadosController extends AppController {
                 break;
             case 'fechados':
                 $conditions = array('Chamado.status' => Chamado::STATUS_FECHADO);
+                break;
+            case 'todos':
+                $conditions = array();
                 break;
         }
 
